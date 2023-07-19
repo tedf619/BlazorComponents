@@ -31,6 +31,7 @@
     {
         string css = "mb-1 me-1 oi ";
         css += IsExpanded ? "oi-chevron-bottom" : "oi-chevron-right";
+        css += IsCollapsible ? "" : "d-none";
         return css;
     }
 
