@@ -1,0 +1,9 @@
+﻿.section-header {
+    display: flex;
+    flex-flow: row;
+    font-size: 14px;
+    color: black;
+    background-color: lightgray;
+    padding: 2px;
+    align-items: center;
+}

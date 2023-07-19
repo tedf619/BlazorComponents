@@ -1,0 +1,41 @@
+﻿<CascadingValue Value="this">
+    <div class=@Css>
+        <div class="section-header">
+            <span class=@IconClass() style="cursor:pointer" @onclick=ButtonClicked></span>
+            <span>@Title</span>
+        </div>
+        @if (IsExpanded)
+        {
+            @ChildContent
+        }
+    </div>
+</CascadingValue>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public string Title { get; set; } = "<Title>";
+
+    [Parameter]
+    public bool IsCollapsible { get; set; } = true;
+
+    [Parameter]
+    public bool IsExpanded { get; set; } = true;
+
+    [Parameter]
+    public string? Css { get; set; } = string.Empty;
+
+    string IconClass()
+    {
+        string css = "mb-1 me-1 oi ";
+        css += IsExpanded ? "oi-chevron-bottom" : "oi-chevron-right";
+        return css;
+    }
+
+    void ButtonClicked()
+    {
+        IsExpanded = !IsExpanded;
+    }
+}

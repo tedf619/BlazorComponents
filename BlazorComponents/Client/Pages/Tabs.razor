@@ -1,0 +1,40 @@
+﻿@page "/tabs"
+
+<PageTitle>Tabs</PageTitle>
+
+<h1>Tabs</h1>
+
+<p>This page shows a tabbed page. You can include arbitrary content in each tab.</p>
+
+<style>
+
+.tab-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 300px;
+    border: 1px solid blue;
+}
+
+</style>
+<TabControl>
+    <TabPage Text="Tab 1">
+        <div class="tab-page" style="background-color:azure">
+            Tab page 1: Add your own controls and components here
+        </div>
+    </TabPage>
+    <TabPage Text="Tab 2">
+        <div class="tab-page" style="background-color:lightgoldenrodyellow">
+            Tab page 2: Add your own controls and components here
+        </div>
+    </TabPage>
+    <TabPage Text="Tab 3">
+        <div class="tab-page" style="background-color:linen">
+            Tab page 3: Add your own controls and components here
+        </div>
+    </TabPage>
+</TabControl>
+@code {
+
+}

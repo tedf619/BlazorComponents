@@ -3,7 +3,7 @@
         <span class="dropdown-text">@Text</span>
     </button>
 
-    @if (IsExpanded)
+    @if (isExpanded)
     {
         <div class=@GetDropdownCssClass() style=@GetDropdownStyle()>
             <ul class="m-0 p-0">
@@ -19,7 +19,7 @@
 </div>
 
 @code {
-    bool IsExpanded = false;
+    bool isExpanded = false;
     int selectedValue;
 
     string Text
@@ -77,7 +77,7 @@
 
     string GetDropdownCssClass()
     {
-        return IsExpanded ? "dropdown-menu d-block position-absolute m-0 p-0" : "dropdown-menu";
+        return isExpanded ? "dropdown-menu d-block position-absolute m-0 p-0" : "dropdown-menu";
     }
 
     string GetDropdownStyle()
@@ -90,17 +90,17 @@
 
     void ShowHideDropdown()
     {
-        IsExpanded = !IsExpanded;
+        isExpanded = !isExpanded;
     }
 
     void Collapse(FocusEventArgs args)
     {
-        IsExpanded = false;
+        isExpanded = false;
     }
 
     void OnKeyDownHandler(KeyboardEventArgs e)
     {
         if (e.Code != "Escape") return;
-        IsExpanded = false;
+        isExpanded = false;
     }
 }

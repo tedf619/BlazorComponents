@@ -1,0 +1,37 @@
+﻿<CascadingValue Value="this">
+	<div class="tab-button-group" style="column-gap:2px" role="group">
+		@foreach (TabPage tabPage in Pages)
+		{
+			<button type="button" class="btn-sm @GetButtonClass(tabPage)" @onclick=@( () => ActivatePage(tabPage) )>
+				@tabPage.Text 
+			</button>
+		}
+	</div>
+	@ChildContent
+</CascadingValue>
+
+@code {
+	[Parameter]
+	public RenderFragment? ChildContent { get; set; }
+
+	public TabPage? ActivePage { get; set; }
+	List<TabPage> Pages = new List<TabPage>();
+
+	internal void AddPage(TabPage tabPage)
+	{
+		Pages.Add(tabPage);
+		if (Pages.Count == 1)
+			ActivePage = tabPage;
+		StateHasChanged();
+	}
+
+	string GetButtonClass(TabPage page)
+	{
+		return page == ActivePage ? "btn-primary" : "btn btn-outline-primary"; 
+	}
+
+	void ActivatePage(TabPage page)
+	{
+		ActivePage = page;
+	}
+}
