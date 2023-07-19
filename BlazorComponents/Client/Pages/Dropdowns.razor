@@ -1,0 +1,101 @@
+﻿@page "/dropdowns"
+
+<PageTitle>Dropdown Controls</PageTitle>
+
+<h3>Dropdown Controls</h3>
+<br />
+
+The HTML <code>&lt;select&gt;</code> element was designed to handle text items.
+If you want to handle enums or database-stored items that have both integer and text values, you need to add code to map text to/from integer values.
+This page demonstrates a <code>&lt;Dropdown&gt;</code> component that is designed for integer/text items.
+Data is passed in using a <code>Dictionary&lt;int, string&gt;</code> container that holds the items. No javascript used.
+<br />
+A couple items of interest:
+<ol>
+    <li>By default the control autosizes the width according to the item selected.</li>
+    <li>By default the control autosizes the dropdown list height to display all the items at once, with no scrollbars.</li>
+    <li>By default the control selects the first item in the list.</li>
+</ol>
+
+<h5>Example using all defaults</h5>
+<Dropdown Items ="@Items"/>
+<br />
+<br />
+
+<h5>Example setting the width</h5>
+<Dropdown Items="@Items" Width="200px"/>
+<br />
+<br />
+
+<h5>Example setting the initial value and displaying the values of the selected item</h5>
+<Dropdown @ref=MyDropdown Items="@Items" Width="200px" SelectedValueChanged="@OnSelectionChanged" />
+Selected Value: @selectedValue
+<br />
+Selected Text: @selectedText
+<br />
+<br />
+
+<h5>Example setting the height of the dropdown list, with support for scrolling</h5>
+<Dropdown Items="@Items" Width="200px" DropdownHeight="100px" />
+<br />
+<br />
+
+<p>For comparison, below is a dropdown control implemented with the standard HTML <code>&lt;select&gt;</code> element.</p>
+<p><b>Note:</b> When changing the selected item, this type of dropdown only tells you the text of the new item (and not the value).</p>
+
+<select style="width:200px">
+@{
+    foreach (var item in Items)
+    {
+        <option value=@item.Key>@item.Value</option>
+    }
+}
+</select>
+
+@code {
+    Dropdown? MyDropdown;
+
+    Dictionary<int, string> Items = new();
+
+    int selectedValue = -1;
+    string selectedText = "<none>";
+
+    void OnSelectionChanged(int newSelectedValue)
+    {
+        if (!Items.ContainsKey(newSelectedValue)) return;
+
+        selectedValue = newSelectedValue;
+        selectedText = Items[selectedValue];
+        StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Items = await Task.FromResult(GetItemsFromServer());  // pretend we're asynchronously retrieving the list from the server
+        StateHasChanged();
+    }
+
+    protected override void OnParametersSet()
+    {
+        MyDropdown?.SelectItemWithValue(3);
+    }
+     
+    Dictionary<int, string> GetItemsFromServer()
+    {
+        Dictionary<int, string> dictionary = new()
+        {
+            {1, "One" },
+            {2, "Two" },
+            {3, "Three" },
+            {4, "Four" },
+            {5, "Five" },
+            {6, "Six" },
+            {7, "Seven" },
+            {8, "Eight" },
+            {9, "Nine" },
+            {10, "Ten" },
+        };
+
+        return dictionary;
+    }
+}

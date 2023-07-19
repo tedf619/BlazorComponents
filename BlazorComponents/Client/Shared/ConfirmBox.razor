@@ -1,0 +1,65 @@
+﻿@inject IJSRuntime js
+
+<dialog @ref="dialogRef" class="dialog p-0" style=@DialogStyle() @onkeydown=OnKeyDownHandler @onkeydown:preventDefault=true>
+    <DialogTitleBar Title=@Title OnDragged=@OnDragged />
+    <div class="p-2">
+        @Message
+    </div>
+    <div class="d-flex justify-content-center mb-3">
+        <button class="btn-sm btn-primary me-2" @onclick="Yes_Clicked">Yes</button>
+        <button class="btn-sm btn-primary" @onclick="No_Clicked">No</button>
+    </div>
+</dialog>
+
+@code {
+    ElementReference dialogRef;
+    public string? Title { get; set; }
+    public string? Message { get; set; }
+    System.Drawing.PointF offset;
+
+    [Parameter]
+    public EventCallback<string> OnClosed { get; set; }
+
+    string DialogStyle()
+    {
+        return $"transform: translate( {offset.X}px, {offset.Y}px)";
+    }
+
+    void OnKeyDownHandler(KeyboardEventArgs e)
+    {
+        // Empty handler. Required in order for the "@keydown:preventDefault=true" attribute to work.
+        // This attribute prevents the ESC key from closing the dialog.
+    }
+
+    public async Task Show(string title, string message)
+    {
+        Title = title;
+        Message = message;
+        StateHasChanged();
+
+        await js.InvokeVoidAsync("showModalDialog", dialogRef);
+    }
+
+    public async Task Close()
+    {
+        await js.InvokeVoidAsync("closeDialog", dialogRef);
+    }
+
+    void OnDragged(System.Drawing.PointF newOffset)
+    {
+        offset = newOffset;
+    }
+
+    async Task Yes_Clicked()
+    {
+        await js.InvokeVoidAsync("closeDialog", dialogRef);
+        await OnClosed.InvokeAsync("yes");
+    }
+
+    async Task No_Clicked()
+    {
+        await js.InvokeVoidAsync("closeDialog", dialogRef);
+        await OnClosed.InvokeAsync("no");
+    }
+
+}

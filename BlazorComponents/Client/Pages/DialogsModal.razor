@@ -1,0 +1,98 @@
+﻿@page "/dialogs-modal"
+
+<PageTitle>Modal Dialogs</PageTitle>
+
+<h1>Modal Dialogs</h1>
+
+<p>Modal dialogs put the application in a "mode", in which the user is disallowed from interacting with the rest of the application until the dialog is dismissed.</p>
+
+<div>
+    <button class="btn-sm btn-primary" @onclick="MessageBoxShow">Show MessageBox</button>
+    <button class="btn-sm btn-primary" @onclick="ConfirmBoxShow">Show ConfirmBox</button>
+    <button class="btn-sm btn-primary" @onclick="DialogModalShow">Show Modal Dialog</button>
+</div>
+
+<MessageBox @ref="MyMessageBox" />
+
+<ConfirmBox @ref="MyConfirmBox" OnClosed="OnConfirmBoxClosed" />
+
+<br />
+
+<p>ConfirmBox close result: @confirmBoxCloseResult</p>
+<p>Modal dialog close result: @ModalDialogCloseResult</p>
+
+<Dialog @ref="MyDialogModal" Title="Simple modal dialog box">
+    <p>You can add any content and controls you need. Here we added some radiobuttons and a couple buttons.</p>
+
+    <h4>Today's specials</h4>
+
+    <input type="radio" class="ms-3" id="pizza" name="lunch_type" />
+    <label class="user-select-none" for="pizza">Pizza</label>
+
+    <input type="radio" class="ms-3" id="hamburger" name="lunch_type" checked />
+    <label class="user-select-none" for="hamburger">Hamburger</label>
+
+    <input type="radio" class="ms-3" id="hotdog" name="lunch_type" />
+    <label class="user-select-none" for="hotdog">Hotdog</label>
+
+    <div class="d-flex justify-content-center mt-3 mb-2">
+        <button class="btn btn-primary me-2" @onclick="OrderNow_Clicked_Modal">Order Now</button>
+        <button class="btn btn-primary" @onclick="Cancel_Clicked_Modal">Cancel</button>
+    </div>
+</Dialog>
+
+@code {
+    MessageBox? MyMessageBox;
+    ConfirmBox? MyConfirmBox;
+    Dialog? MyDialogModal;
+
+    string confirmBoxCloseResult = "<none>";
+    string ModalDialogCloseResult = "<none>";
+
+    async void MessageBoxShow()
+    {
+        if (MyMessageBox == null) return;
+
+        string message = "This dialog is similar to the javascript alert control, but looks better, is easily customizable and can be moved by clicking the title bar area. The box can be closed by clicking the OK button or using the ESC key. No javascript used.";
+        await MyMessageBox.Show("Simple MessageBox", message);
+    }
+
+    async void ConfirmBoxShow()
+    {
+        if (MyConfirmBox == null) return;
+
+        string message = "This component allows your app to prompt the user with questions that require a Yes/No answer. The user's yes/no response is returned via an event. Unlike the MessageBox, the ConfirmBox can't be closed with the ESC key.";
+        await MyConfirmBox.Show("Simple ConfirmBox", message);
+
+        Console.WriteLine("ConfirmBox shown");
+    }
+
+    void OnConfirmBoxClosed(string result)
+    {
+        confirmBoxCloseResult = result;
+    }
+
+    async void DialogModalShow()
+    {
+        if (MyDialogModal != null)
+            await MyDialogModal.ShowModal();
+    }
+
+    async void OrderNow_Clicked_Modal()
+    {
+        if (MyDialogModal != null)
+            await MyDialogModal.Close();
+
+        ModalDialogCloseResult = "OrderNow";
+        StateHasChanged();
+    }
+
+    async void Cancel_Clicked_Modal()
+    {
+        if (MyDialogModal != null)
+            await MyDialogModal.Close();
+
+        ModalDialogCloseResult = "Cancel";
+        StateHasChanged();
+    }
+}

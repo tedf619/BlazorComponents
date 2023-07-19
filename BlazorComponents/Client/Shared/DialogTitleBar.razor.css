@@ -1,0 +1,9 @@
+﻿.title-bar {
+    display: flex;
+    flex-flow: row;
+    font-size: 18px;
+    color: #ffffff;
+    background-color: #639ace;
+    padding: 2px;
+    align-items: center;
+}

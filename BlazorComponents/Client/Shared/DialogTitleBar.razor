@@ -1,0 +1,45 @@
+﻿@inject IJSRuntime js
+
+<div @ref="titleBarRef" class="title-bar" style="cursor:move" @onpointerdown=@OnPointerDown @onpointerup=@OnPointerUp @onpointermove=@OnPointerMove>
+   @Title
+</div>
+
+@code {
+
+    ElementReference titleBarRef;
+
+    System.Drawing.PointF start, offset, offsetPrevious;
+
+    [Parameter]
+    public EventCallback<System.Drawing.PointF> OnDragged { get; set; }
+
+    [Parameter]
+    public string Title { get; set; } = "<Title>";
+
+    async Task OnPointerDown(PointerEventArgs args)
+    {
+        start.X = (float) args.ScreenX;
+        start.Y = (float) args.ScreenY;
+
+        await js.InvokeVoidAsync("pointerCapture", titleBarRef, args.PointerId);
+    }
+
+    async Task OnPointerUp(PointerEventArgs args)
+    {
+        offsetPrevious = offset;
+
+        await js.InvokeVoidAsync("pointerRelease", titleBarRef, args.PointerId);
+    }
+
+    void OnPointerMove(PointerEventArgs args)
+    {
+        const int LeftButton = 1;
+
+        if (args.Buttons != LeftButton) return;
+
+        offset.X = (float) (args.ScreenX - start.X + offsetPrevious.X);
+        offset.Y = (float) (args.ScreenY - start.Y + offsetPrevious.Y);
+
+        OnDragged.InvokeAsync(offset);
+    }
+}

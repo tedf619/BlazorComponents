@@ -1,0 +1,7 @@
+﻿
+.dialog {
+    border: 1px solid darkgray;
+    max-width: 400px;
+    max-height: 500px;
+    padding: 0px;
+}

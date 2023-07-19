@@ -1,0 +1,58 @@
+﻿<!-- This component supports both modal and modeless dialogs -->
+
+@inject IJSRuntime js
+
+<dialog @ref="dialogRef" class="dialog" style=@DialogStyle() @onkeydown=OnKeyDownHandler @onkeydown:preventDefault=@isEscapeKey>
+    <DialogTitleBar Title=@Title OnDragged=@OnDragged />
+    <div class="p-1">
+        @ChildContent
+    </div>
+</dialog>
+
+@code {
+    ElementReference dialogRef;
+
+    System.Drawing.PointF offset;
+    bool open;
+    bool isEscapeKey;
+
+    [Parameter]
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    string DialogStyle()
+    {
+        return $"transform: translate( {offset.X}px, {offset.Y}px)";
+    }
+
+    void OnKeyDownHandler(KeyboardEventArgs e)
+    {
+        isEscapeKey = e.Code == "Escape";
+    }
+
+    public async Task ShowModal()
+    {
+        await js.InvokeVoidAsync("showModalDialog", dialogRef);
+    }
+
+    public async Task Show()
+    {
+        if (open) return;
+
+        await js.InvokeVoidAsync("showModelessDialog", dialogRef);
+        open = true;
+    }
+
+    public async Task Close()
+    {
+        await js.InvokeVoidAsync("closeDialog", dialogRef);
+        open = false;
+    }
+
+    void OnDragged(System.Drawing.PointF newOffset)
+    {
+        offset = newOffset;
+    }
+}

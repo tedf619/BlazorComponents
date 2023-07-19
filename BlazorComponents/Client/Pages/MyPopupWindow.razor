@@ -1,0 +1,28 @@
+﻿@page "/test-window"
+@layout PopupWindowLayout
+@inherits PopupWindowBase
+
+<h1>Simple Popup Window</h1>
+
+<p>Popup windows are similar to modeless dialogs, but can be also dragged outside the browser window onto a second monitor.</p>
+<p>They are more complicated to use than modeless dialogs because they run in a separate process from their parent component. Because of this, they require SignalR in order to fire events back to the parent. Also, because they are separate windows, they don't auto-size to their contents. You must specify their position and size programmatically.</p>
+<p>Popup windows are like regular Blazor pages but use a custom layout. The default layout (in MainLayout.razor) would include the Blazor navigator and header bar inside the window.</p>
+<p>Clicking the button below shows how to fire events to the dailog's parent. In this demo we increment the parent's counter value.</p>
+
+<button class="btn btn-primary" @onclick="OnClick">Click me</button>
+
+@code {
+    [Parameter]
+    public EventCallback OnClicked { get; set; }
+
+    async void OnClick()
+    {
+        await Send("button clicked");
+    }
+
+    protected override void HandleEvent(string message)
+    {
+        if (message == "button clicked")
+            OnClicked.InvokeAsync();
+    }
+}

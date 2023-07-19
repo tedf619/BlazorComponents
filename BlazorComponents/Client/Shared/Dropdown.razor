@@ -1,0 +1,106 @@
+﻿<div class="d-inline position-relative">
+    <button class=@GetButtonCssClass() style=@GetButtonStyle() type="button" @onclick="@ShowHideDropdown" @onblur="Collapse" @onkeydown=OnKeyDownHandler>
+        <span class="dropdown-text">@Text</span>
+    </button>
+
+    @if (IsExpanded)
+    {
+        <div class=@GetDropdownCssClass() style=@GetDropdownStyle()>
+            <ul class="m-0 p-0">
+                @{
+                    foreach (var item in Items)
+                    {
+                        <DropdownItem Value=@item.Key Text=@item.Value ItemClicked="@DropdownItemClicked" IsSelected="@IsItemSelected(@item.Key)"></DropdownItem>
+                    }
+                }
+            </ul>
+        </div>
+    }
+</div>
+
+@code {
+    bool IsExpanded = false;
+    int selectedValue;
+
+    string Text
+    {
+        get
+        {
+            if (Items.Count == 0) return string.Empty;
+
+            if (Items.ContainsKey(selectedValue))
+                return Items[selectedValue];
+            else
+                return Items.Values.First();
+        }
+    }
+
+    [Parameter]
+    public Dictionary<int, string> Items { get; set; } = new();
+
+    [Parameter]
+    public string DropdownHeight { get; set; } = string.Empty;  // e.g. 200px
+
+    [Parameter]
+    public string Width { get; set; } = string.Empty;
+
+    [Parameter]
+    public EventCallback<int> SelectedValueChanged { get; set; }
+
+    bool IsItemSelected(int value)
+    {
+        return value == selectedValue;
+    }
+
+    void DropdownItemClicked(int value)
+    {
+        SelectItemWithValue(value);
+    }
+
+    public async void SelectItemWithValue(int value)
+    {
+        if (!Items.ContainsKey(value)) return;
+
+        selectedValue = value;
+        await SelectedValueChanged.InvokeAsync(selectedValue).ConfigureAwait(true);
+    }
+
+    string GetButtonCssClass()
+    {
+        return $"btn-sm dropdown-button dropdown-toggle dropdown-toggle-on-right";
+    }
+
+    string GetButtonStyle()
+    {
+        return $"width:{Width}; height: 1.4rem;";
+    }
+
+    string GetDropdownCssClass()
+    {
+        return IsExpanded ? "dropdown-menu d-block position-absolute m-0 p-0" : "dropdown-menu";
+    }
+
+    string GetDropdownStyle()
+    {
+        string s = "left:5px; overflow-y:auto; overflow-x: hidden;";
+        if (!string.IsNullOrEmpty(DropdownHeight))
+            s += $" height:{DropdownHeight}";
+        return s;
+    }
+
+    void ShowHideDropdown()
+    {
+        IsExpanded = !IsExpanded;
+    }
+
+    void Collapse(FocusEventArgs args)
+    {
+        IsExpanded = false;
+    }
+
+    void OnKeyDownHandler(KeyboardEventArgs e)
+    {
+        if (e.Code != "Escape") return;
+        IsExpanded = false;
+    }
+}

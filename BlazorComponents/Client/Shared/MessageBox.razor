@@ -1,0 +1,47 @@
+﻿@inject IJSRuntime js
+
+<dialog @ref="dialogRef" class="dialog p-0" style=@DialogStyle()>
+    <DialogTitleBar Title=@Title OnDragged=@OnDragged />
+    <div class="p-2">
+        @Message
+    </div>
+    <div class="button-bar mt-2 mb-2">
+        <button class="btn-sm btn-primary" style="width:80px" @onclick=@Ok_Clicked>OK</button>
+    </div>
+</dialog>
+
+@code {
+    ElementReference dialogRef;
+    public string? Title { get; set; }
+    public string? Message { get; set; }
+    System.Drawing.PointF offset;
+
+    string DialogStyle()
+    {
+        return $"transform: translate( {offset.X}px, {offset.Y}px)";
+    }
+
+    public async Task Show(string title, string message)
+    {
+        Title = title;
+        Message = message;
+        StateHasChanged();
+
+        await js.InvokeVoidAsync("showModalDialog", dialogRef);
+    }
+
+    public async Task Close()
+    {
+        await js.InvokeVoidAsync("closeDialog", dialogRef);
+    }
+
+    void OnDragged(System.Drawing.PointF newOffset)
+    {
+        offset = newOffset;
+    }
+ 
+    async Task Ok_Clicked()
+    {
+        await js.InvokeVoidAsync("closeDialog", dialogRef);
+    }
+}

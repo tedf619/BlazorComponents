@@ -1,0 +1,32 @@
+﻿<li class="dropdown-item ms-1 me-1 p-0">
+    <a class="dropdown-item p-0" style=@GetStyle() @onmousedown="( () => ClickHandler() )" href="#">@Text</a>
+</li>
+
+@code {
+    [Parameter]
+    public string Text { get; set; } = "<Item>";
+
+    [Parameter]
+    public int Value { get; set; }
+
+    [Parameter]
+    public bool IsSelected { get; set; }
+
+    [Parameter]
+    public EventCallback<int> ItemClicked { get; set; }
+
+    async void ClickHandler()
+    {
+        await ItemClicked.InvokeAsync(Value);
+    }
+
+    string GetStyle()
+    {
+        string s = "line-height: 1.2rem;";
+
+        if (IsSelected)
+            s += " background-color: lightgray";
+
+        return s;
+    }
+}

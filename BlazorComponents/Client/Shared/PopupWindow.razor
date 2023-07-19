@@ -1,0 +1,28 @@
+﻿@inject IJSRuntime Js
+
+<div @ref="divRef" style="display:none">
+    @ChildContent
+</div>
+
+@code {
+    ElementReference divRef;
+    string? pageUrl;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    public async Task Show(string url, int left, int top, int width, int height)
+    {
+        pageUrl = url;
+        string windowFeatures = $"left={left},top={top},width={width},height={height}, popup=true";
+
+        await Js.InvokeVoidAsync("showPopupWindow", pageUrl, windowFeatures);
+    }
+
+    public async Task Close()
+    {
+        if (pageUrl == null) return;
+        await Js.InvokeVoidAsync("closePopupWindow", pageUrl);
+        pageUrl = null;
+    }
+}

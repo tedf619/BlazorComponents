@@ -1,0 +1,91 @@
+﻿@page "/dialogs-modeless"
+
+<PageTitle>Modeless Dialogs</PageTitle>
+
+<h1>Modeless Dialogs</h1>
+
+<p>Modeless (also called non-modal) dialogs allow the user to interact with the rest of the application while they are displayed.</p>
+
+<div class="mb-4">
+    <button class="btn-sm btn-primary" @onclick="DialogModelessShow">Show Modeless Dialog</button>
+    <button class="btn-sm btn-primary me-5" @onclick="DialogModelessClose">Close Modeless Dialog</button>
+
+    <button class="btn-sm btn-primary" @onclick="PopupWindowShow">Show Popup Window</button>
+    <button class="btn-sm btn-primary" @onclick="PopupWindowClose">Close Popup Window</button>
+</div>
+
+<p>Current count: @currentCount</p>
+<p>Modeless dialog close result: @ModelessResult</p>
+
+<Dialog @ref="MyDialogModeless" Title="Simple modeless dialog box">
+    <p>As with modal dialogs, you can add any content and controls you need. Modeless dialogs can be moved around but are confined to the browser window where they were opened. If you need a modeless dialog that can be dragged to a separate monitor, use the PopupWindow component.</p>
+    <p>By default, modeless dialogs open right below their parent control, which in this demo is a button. Firing events to the dialog parent is as simple as adding event handlers to the dialog's controls. The IncrementCount button shows an example.</p>
+    <div class="d-flex justify-content-center mb-2">
+        <button class="btn btn-primary me-2" @onclick="IncrementCount">Increment Count</button>
+        <button class="btn btn-primary me-2" @onclick="Ok_Clicked_Modeless">OK</button>
+        <button class="btn btn-primary" @onclick="Cancel_Clicked_Modeless">Cancel</button>
+    </div>
+</Dialog>
+
+<PopupWindow @ref="MyWindow">
+    <MyPopupWindow OnClicked="WindowButtonClicked"></MyPopupWindow>
+</PopupWindow>
+
+@code {
+    int currentCount = 0;
+    void IncrementCount()
+    {
+        currentCount++;
+    }
+
+    string? ModelessResult { get; set; } = "<none>";
+    PopupWindow? MyWindow;
+    Dialog? MyDialogModeless;
+
+    void WindowButtonClicked()
+    {
+        IncrementCount();
+    }
+
+    async void DialogModelessShow()
+    {
+        ModelessResult = "<none>";
+
+        if (MyDialogModeless == null) return;
+        await MyDialogModeless.Show();
+    }
+
+    async void DialogModelessClose()
+    {
+        if (MyDialogModeless == null) return;
+        await MyDialogModeless.Close();
+    }
+
+    async void PopupWindowShow()
+    {
+        if (MyWindow == null) return;
+        await MyWindow.Show("/test-window", left: 600, top: 400, width: 700, height: 460);
+    }
+
+    async void PopupWindowClose()
+    {
+        if (MyWindow == null) return;
+        await MyWindow.Close();
+    }
+
+    async void Ok_Clicked_Modeless()
+    {
+        if (MyDialogModeless == null) return;
+        await MyDialogModeless.Close();
+        ModelessResult = "OK";
+        StateHasChanged();
+    }
+
+    async void Cancel_Clicked_Modeless()
+    {
+        if (MyDialogModeless == null) return;
+        await MyDialogModeless.Close();
+        ModelessResult = "Cancel";
+        StateHasChanged();
+    }
+}
