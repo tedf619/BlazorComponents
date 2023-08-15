@@ -2,7 +2,7 @@
 
 <PageTitle>Modal Dialogs</PageTitle>
 
-<h1>Modal Dialogs</h1>
+<h6>Modal Dialogs</h6>
 
 <p>Modal dialogs put the application in a "mode", in which the user is disallowed from interacting with the rest of the application until the dialog is dismissed.</p>
 
@@ -10,6 +10,7 @@
     <button class="btn-sm btn-primary" @onclick="MessageBoxShow">Show MessageBox</button>
     <button class="btn-sm btn-primary" @onclick="ConfirmBoxShow">Show ConfirmBox</button>
     <button class="btn-sm btn-primary" @onclick="DialogModalShow">Show Modal Dialog</button>
+    <button class="btn-sm btn-primary" @onclick="DialogModalWithTabsShow">Show Modal Dialog with Tabs</button>
 </div>
 
 <MessageBox @ref="MyMessageBox" />
@@ -20,6 +21,7 @@
 
 <p>ConfirmBox close result: @confirmBoxCloseResult</p>
 <p>Modal dialog close result: @ModalDialogCloseResult</p>
+<p>Tabbed dialog close result: @TabbedDialogCloseResult</p>
 
 <Dialog @ref="MyDialogModal" Title="Simple modal dialog box">
     <p>You can add any content and controls you need. Here we added some radiobuttons and a couple buttons.</p>
@@ -41,13 +43,39 @@
     </div>
 </Dialog>
 
+<Dialog @ref=DialogModalWithTabs Title="Dialog with Tabs">
+    <div class="dialog-with-bottom-bar">
+        <TabControl>
+            <TabPage Text="Tab 1">
+                <div class="tab-page-fixed-size">  <!--So dialog doesn't resize if tabbed pages are different size-->
+                    <div class="tab-page1" style="background-color:azure">
+                        Tab page 1: Add your own controls and components here
+                    </div>
+                </div>
+            </TabPage>
+            <TabPage Text="Tab 2">
+                <div class="tab-page-fixed-size">
+                    <div class="tab-page2" style="background-color:beige">
+                        Tab page 2: Add your own controls and components here
+                    </div>
+                </div>
+            </TabPage>
+        </TabControl>
+        <div class="bottom-bar">
+            <button class="btn-sm btn-primary me-2" @onclick="TabbedDialog_OkClicked">OK</button>
+            <button class="btn-sm btn-primary" @onclick="TabbedDialog_CancelClicked">Cancel</button>
+            </div>
+    </div>
+</Dialog>
+
 @code {
     MessageBox? MyMessageBox;
     ConfirmBox? MyConfirmBox;
-    Dialog? MyDialogModal;
+    Dialog? MyDialogModal, DialogModalWithTabs;
 
     string confirmBoxCloseResult = "<none>";
     string ModalDialogCloseResult = "<none>";
+    string TabbedDialogCloseResult = "<none>";
 
     async void MessageBoxShow()
     {
@@ -78,6 +106,12 @@
             await MyDialogModal.ShowModal();
     }
 
+    async void DialogModalWithTabsShow()
+    {
+        if (DialogModalWithTabs != null)
+            await DialogModalWithTabs.ShowModal();
+    }
+
     async void OrderNow_Clicked_Modal()
     {
         if (MyDialogModal != null)
@@ -95,4 +129,23 @@
         ModalDialogCloseResult = "Cancel";
         StateHasChanged();
     }
+
+    async void TabbedDialog_OkClicked()
+    {
+        if (DialogModalWithTabs != null)
+            await DialogModalWithTabs.Close();
+
+        TabbedDialogCloseResult = "OK";
+        StateHasChanged();
+    }
+
+    async void TabbedDialog_CancelClicked()
+    {
+        if (DialogModalWithTabs != null)
+            await DialogModalWithTabs.Close();
+
+        TabbedDialogCloseResult = "Cancel";
+        StateHasChanged();
+    }
+
 }
