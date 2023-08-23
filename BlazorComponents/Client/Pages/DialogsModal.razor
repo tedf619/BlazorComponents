@@ -46,25 +46,26 @@
 <Dialog @ref=DialogModalWithTabs Title="Dialog with Tabs">
     <div class="dialog-with-bottom-bar">
         <TabControl>
-            <TabPage Text="Tab 1">
-                <div class="tab-page-fixed-size">  <!--So dialog doesn't resize if tabbed pages are different size-->
+            <div class="tab-page-fixed-size">
+                <TabPage Text="Tab 1">
+                    <!--So dialog doesn't resize if tabbed pages are different size-->
                     <div class="tab-page1" style="background-color:azure">
-                        Tab page 1: Add your own controls and components here
+                    Tab page 1: Add your own controls and components here
                     </div>
-                </div>
-            </TabPage>
-            <TabPage Text="Tab 2">
-                <div class="tab-page-fixed-size">
-                    <div class="tab-page2" style="background-color:beige">
+                </TabPage>
+                <TabPage Text="Tab 2">
+                    @*               <div class="tab-page-fixed-size">
+                    *@                    <div class="tab-page2" style="background-color:beige">
                         Tab page 2: Add your own controls and components here
                     </div>
-                </div>
-            </TabPage>
+                    @*</div>*@
+                </TabPage>
+            </div>
         </TabControl>
         <div class="bottom-bar">
             <button class="btn-sm btn-primary me-2" @onclick="TabbedDialog_OkClicked">OK</button>
             <button class="btn-sm btn-primary" @onclick="TabbedDialog_CancelClicked">Cancel</button>
-            </div>
+        </div>
     </div>
 </Dialog>
 
