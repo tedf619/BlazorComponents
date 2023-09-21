@@ -23,50 +23,51 @@
 <p>Modal dialog close result: @ModalDialogCloseResult</p>
 <p>Tabbed dialog close result: @TabbedDialogCloseResult</p>
 
-<Dialog @ref="MyDialogModal" Title="Simple modal dialog box">
-    <p>You can add any content and controls you need. Here we added some radiobuttons and a couple buttons.</p>
+<Dialog @ref="MyDialogModal" Title="Simple modal dialog box" Width="800px">
+    <ChildContent>
+        <p>You can add any content and controls you need. Here we added some radiobuttons and a couple buttons.</p>
 
-    <h4>Today's specials</h4>
+        <h4>Today's specials</h4>
 
-    <input type="radio" class="ms-3" id="pizza" name="lunch_type" />
-    <label class="user-select-none" for="pizza">Pizza</label>
+        <input type="radio" class="ms-3" id="pizza" name="lunch_type" />
+        <label class="user-select-none" for="pizza">Pizza</label>
 
-    <input type="radio" class="ms-3" id="hamburger" name="lunch_type" checked />
-    <label class="user-select-none" for="hamburger">Hamburger</label>
+        <input type="radio" class="ms-3" id="hamburger" name="lunch_type" checked />
+        <label class="user-select-none" for="hamburger">Hamburger</label>
 
-    <input type="radio" class="ms-3" id="hotdog" name="lunch_type" />
-    <label class="user-select-none" for="hotdog">Hotdog</label>
-
-    <div class="d-flex justify-content-center mt-3 mb-2">
+        <input type="radio" class="ms-3" id="hotdog" name="lunch_type" />
+        <label class="user-select-none" for="hotdog">Hotdog</label>
+    </ChildContent>
+    <FooterContent>
         <button class="btn btn-primary me-2" @onclick="OrderNow_Clicked_Modal">Order Now</button>
         <button class="btn btn-primary" @onclick="Cancel_Clicked_Modal">Cancel</button>
-    </div>
+    </FooterContent>
 </Dialog>
 
-<Dialog @ref=DialogModalWithTabs Title="Dialog with Tabs">
-    <div class="dialog-with-bottom-bar">
+<Dialog @ref=DialogModalWithTabs Title="Dialog with Tabs" Width="500px">
+    <ChildContent>
         <TabControl>
+            <!--div used so dialog doesn't resize if tabbed pages are different size-->
             <div class="tab-page-fixed-size">
                 <TabPage Text="Tab 1">
-                    <!--So dialog doesn't resize if tabbed pages are different size-->
                     <div class="tab-page1" style="background-color:azure">
-                    Tab page 1: Add your own controls and components here
+                        Tab page 1: Add your own controls and components here. 
+                        <br />
+                        Note: dialogs are scrollable if content exceeds size.
                     </div>
                 </TabPage>
                 <TabPage Text="Tab 2">
-                    @*               <div class="tab-page-fixed-size">
-                    *@                    <div class="tab-page2" style="background-color:beige">
+                    <div class="tab-page2" style="background-color:beige">
                         Tab page 2: Add your own controls and components here
                     </div>
-                    @*</div>*@
                 </TabPage>
             </div>
         </TabControl>
-        <div class="bottom-bar">
-            <button class="btn-sm btn-primary me-2" @onclick="TabbedDialog_OkClicked">OK</button>
-            <button class="btn-sm btn-primary" @onclick="TabbedDialog_CancelClicked">Cancel</button>
-        </div>
-    </div>
+    </ChildContent>
+    <FooterContent>
+        <button class="btn-sm btn-primary me-2" @onclick="TabbedDialog_OkClicked">OK</button>
+        <button class="btn-sm btn-primary" @onclick="TabbedDialog_CancelClicked">Cancel</button>
+    </FooterContent>
 </Dialog>
 
 @code {

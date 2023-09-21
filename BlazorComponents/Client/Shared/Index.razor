@@ -2,20 +2,45 @@
 
 <PageTitle>Basic Information</PageTitle>
 
-<h1>Basic Information</h1>
+<style>
+    .dialog-layout {
+        display: flex;
+        flex-direction: column;
+        width: 1000px;
+        height: 700px;
+    }
 
-<h5>This app shows different types of modal and modeless dialog boxes implemented in Blazor.</h5>
+    .scrollable-area {
+        height: 500px;
+        background-color: pink;
+        overflow: auto;
+        flex-grow: 1;
+    }
 
-<br /><br />
+    .top {
+        /*         width: 100%;
+         */ height: 1000px;
+        background-color: beige;
+        border: 1px solid black;
+    }
 
-<h5>About PopupWindows</h5>
-<p>The PopupWindow component supports functionality similar to a modeless dialog box, with the extra feature of being draggable to a second monitor.
-In order to fire events (e.g. button clicks) from the PopupWindow back to the dialog's parent, we route the events through the server using SignalR.
-The PopupWindow and the dialog parent communicate with each other this way. They can't call each other directly because they run in separate browser contexts.
-</p>
+    .bottom {
+        display: flex;
+        width: 100%;
+        height: 50px;
+        justify-content: center;
+        padding-top: 4px;
+        padding-bottom: 4px;
+        border-top: 1px solid gray;
+        background-color: whitesmoke;
+    }
+</style>
 
-<h5>Note</h5>
-<p>
-    There is small file under wwwroot->scripts called <code>interop.js</code>. It contains some very simple javascript that augments the C# code.
-    This file must be added at the end of the <code>index.html</code> file (right after the webassembly script).
-</p>
+<div class="dialog-layout">
+    <div class="scrollable-area">
+        <div class="top" />
+    </div>
+    <div class="bottom">
+        <button class="btn btn-primary">OK</button>
+    </div>
+</div>

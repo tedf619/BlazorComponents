@@ -1,11 +1,19 @@
-﻿<!-- This component supports both modal and modeless dialogs -->
+﻿<!--This component supports both Modal and Modeless dialogs-->
 
 @inject IJSRuntime js
 
-<dialog @ref="dialogRef" class="dialog" style=@DialogStyle() @onkeydown=OnKeyDownHandler @onkeydown:preventDefault=@isEscapeKey>
-    <DialogTitleBar Title=@Title OnDragged=@OnDragged />
-    <div class="p-1">
-        @ChildContent
+<dialog @ref="dialogRef" class="dialog" style=@DialogStyle()>
+    <DialogTitleBar Title=@Title IsDraggable=IsDraggable OnDragged=@OnDragged />
+    <div class="dialog-scrollable">
+        <div class="dialog-scrollable-area" style="width: @Width">
+            @ChildContent
+        </div>
+        @if (FooterContent != null)
+        {
+            <div class="dialog-bottom">
+                @FooterContent
+            </div>
+        }
     </div>
 </dialog>
 
@@ -14,22 +22,25 @@
 
     System.Drawing.PointF offset;
     bool open;
-    bool isEscapeKey;
 
     [Parameter]
     public string Title { get; set; } = string.Empty;
 
     [Parameter]
+    public string Width { get; set; } = "400px";
+
+    [Parameter]
+    public bool IsDraggable { get; set; } = true;
+
+    [Parameter]
     public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public RenderFragment? FooterContent { get; set; }
 
     string DialogStyle()
     {
         return $"transform: translate( {offset.X}px, {offset.Y}px)";
-    }
-
-    void OnKeyDownHandler(KeyboardEventArgs e)
-    {
-        isEscapeKey = e.Code == "Escape";
     }
 
     public async Task ShowModal()
@@ -53,6 +64,7 @@
 
     void OnDragged(System.Drawing.PointF newOffset)
     {
+        if (!IsDraggable) return;
         offset = newOffset;
     }
 }

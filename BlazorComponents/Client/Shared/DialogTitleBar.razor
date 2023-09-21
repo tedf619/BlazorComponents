@@ -1,10 +1,12 @@
 ﻿@inject IJSRuntime js
 
-<div @ref="titleBarRef" class="title-bar" style="cursor:move" @onpointerdown=@OnPointerDown @onpointerup=@OnPointerUp @onpointermove=@OnPointerMove>
-   @Title
+<div @ref="titleBarRef" class="section-header" style=@GetStyle() @onpointerdown=@OnPointerDown @onpointerup=@OnPointerUp @onpointermove=@OnPointerMove>
+    @Title
 </div>
 
 @code {
+    [Parameter]
+    public bool IsDraggable { get; set; } = true;
 
     ElementReference titleBarRef;
 
@@ -16,10 +18,16 @@
     [Parameter]
     public string Title { get; set; } = "<Title>";
 
+    string GetStyle()
+    {
+        string style = IsDraggable ? "cursor:move" : "cursor:default";
+        return $"{style}; background-color:blue; color:white";
+    }
+
     async Task OnPointerDown(PointerEventArgs args)
     {
-        start.X = (float) args.ScreenX;
-        start.Y = (float) args.ScreenY;
+        start.X = (float)args.ScreenX;
+        start.Y = (float)args.ScreenY;
 
         await js.InvokeVoidAsync("pointerCapture", titleBarRef, args.PointerId);
     }
@@ -37,8 +45,8 @@
 
         if (args.Buttons != LeftButton) return;
 
-        offset.X = (float) (args.ScreenX - start.X + offsetPrevious.X);
-        offset.Y = (float) (args.ScreenY - start.Y + offsetPrevious.Y);
+        offset.X = (float)(args.ScreenX - start.X + offsetPrevious.X);
+        offset.Y = (float)(args.ScreenY - start.Y + offsetPrevious.Y);
 
         OnDragged.InvokeAsync(offset);
     }

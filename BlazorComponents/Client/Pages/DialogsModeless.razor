@@ -18,13 +18,15 @@
 <p>Modeless dialog close result: @ModelessResult</p>
 
 <Dialog @ref="MyDialogModeless" Title="Simple modeless dialog box">
-    <p>As with modal dialogs, you can add any content and controls you need. Modeless dialogs can be moved around but are confined to the browser window where they were opened. If you need a modeless dialog that can be dragged to a separate monitor, use the PopupWindow component.</p>
-    <p>By default, modeless dialogs open right below their parent control, which in this demo is a button. Firing events to the dialog parent is as simple as adding event handlers to the dialog's controls. The IncrementCount button shows an example.</p>
-    <div class="d-flex justify-content-center mb-2">
+    <ChildContent>
+        <p>As with modal dialogs, you can add any content and controls you need. Modeless dialogs can be moved around but are confined to the browser window where they were opened. If you need a modeless dialog that can be dragged to a separate monitor, use the PopupWindow component.</p>
+        <p>By default, modeless dialogs open right below their parent control, which in this demo is a button. Firing events to the dialog parent is as simple as adding event handlers to the dialog's controls. The IncrementCount button shows an example.</p>
+    </ChildContent>
+    <FooterContent>
         <button class="btn btn-primary me-2" @onclick="IncrementCount">Increment Count</button>
         <button class="btn btn-primary me-2" @onclick="Ok_Clicked_Modeless">OK</button>
         <button class="btn btn-primary" @onclick="Cancel_Clicked_Modeless">Cancel</button>
-    </div>
+    </FooterContent>
 </Dialog>
 
 <PopupWindow @ref="MyWindow">

@@ -1,17 +1,4 @@
-﻿.dialog-with-bottom-bar {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-}
-
-.bottom-bar {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    padding-top: 4px;
-}
-
-.tab-page1 {
+﻿.tab-page1 {
     width: 490px;
     height: 800px;
 }
