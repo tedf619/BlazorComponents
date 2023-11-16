@@ -25,18 +25,25 @@
 
 <Dialog @ref="MyDialogModal" Title="Simple modal dialog box" Width="800px">
     <ChildContent>
-        <p>You can add any content and controls you need. Here we added some radiobuttons and a couple buttons.</p>
+        <EditForm Model="Dto">
+            <div class="p-2">
+                <p>
+                    You can add any content and controls you need.<br />
+                    Here we added some radiobuttons and a couple buttons.
+                </p>
 
-        <h4>Today's specials</h4>
+                <h4>@Dto.Header</h4>
 
-        <input type="radio" class="ms-3" id="pizza" name="lunch_type" />
-        <label class="user-select-none" for="pizza">Pizza</label>
+                <input type="radio" class="ms-3" id="pizza" name="lunch_type" />
+                <label class="user-select-none" for="pizza">Pizza</label>
 
-        <input type="radio" class="ms-3" id="hamburger" name="lunch_type" checked />
-        <label class="user-select-none" for="hamburger">Hamburger</label>
+                <input type="radio" class="ms-3" id="hamburger" name="lunch_type" checked />
+                <label class="user-select-none" for="hamburger">Hamburger</label>
 
-        <input type="radio" class="ms-3" id="hotdog" name="lunch_type" />
-        <label class="user-select-none" for="hotdog">Hotdog</label>
+                <input type="radio" class="ms-3" id="hotdog" name="lunch_type" />
+                <label class="user-select-none" for="hotdog">Hotdog</label>
+            </div>
+        </EditForm>
     </ChildContent>
     <FooterContent>
         <button class="btn btn-primary me-2" @onclick="OrderNow_Clicked_Modal">Order Now</button>
@@ -51,7 +58,7 @@
             <div class="tab-page-fixed-size">
                 <TabPage Text="Tab 1">
                     <div class="tab-page1" style="background-color:azure">
-                        Tab page 1: Add your own controls and components here. 
+                        Tab page 1: Add your own controls and components here.
                         <br />
                         Note: dialogs are scrollable if content exceeds size.
                     </div>
@@ -78,6 +85,13 @@
     string confirmBoxCloseResult = "<none>";
     string ModalDialogCloseResult = "<none>";
     string TabbedDialogCloseResult = "<none>";
+
+    public MyDto Dto { get; set; } = new() { Header = "Today's specials" };
+
+    public class MyDto
+    {
+        public string Header { get; set; } = string.Empty;
+    }
 
     async void MessageBoxShow()
     {
