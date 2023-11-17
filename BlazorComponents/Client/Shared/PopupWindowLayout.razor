@@ -1,7 +1,18 @@
 ﻿@inherits LayoutComponentBase
 
+<style>
+    .page {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .content {
+        padding: 1rem;
+    }
+</style>
+
 <div class="page">
-    <div class="content px-4">
+    <div class="content">
         @Body
     </div>
 </div>
